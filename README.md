@@ -1,70 +1,136 @@
+# Smart Home Automation System (ESP32 + BLE Mesh)
 
+An IoT-based smart home automation system developed using ESP32 and the ESP-IDF framework. It uses a Bluetooth Low Energy (BLE) Mesh network to connect three device nodes: a Light Sensor, a Switch, and a Gateway. The system monitors ambient light levels and automatically controls a connected lamp through a relay based on predefined light thresholds.
 
+Integrates BLE Mesh networking, Wi-Fi connectivity, and a web-based interface to provide wireless communication and remote device control. Users can also provision and configure network devices using the nRF Mesh mobile application.
 
-# Developing IoT Projects with ESP32
+![framework](https://img.shields.io/badge/framework-ESP--IDF-red) ![platform](https://img.shields.io/badge/platform-ESP32-blue) ![network](https://img.shields.io/badge/network-BLE%20Mesh-0082FC) ![protocol](https://img.shields.io/badge/protocol-Bluetooth%20LE-660066) ![connectivity](https://img.shields.io/badge/connectivity-Wi--Fi-green) ![control](https://img.shields.io/badge/control-Web%20Interface-orange) ![hardware](https://img.shields.io/badge/hardware-TSL2561%20%7C%20Relay-brightgreen)
 
-<a href="https://www.packtpub.com/product/developing-iot-projects-with-esp32/9781838641160?utm_source=github&utm_medium=repository&utm_campaign=9781838641160"><img src="https://static.packt-cdn.com/products/9781838641160/cover/smaller" alt="Developing IoT Projects with ESP32" height="256px" align="right"></a>
+---
 
-This is the code repository for [Developing IoT Projects with ESP32](https://www.packtpub.com/product/developing-iot-projects-with-esp32/9781838641160?utm_source=github&utm_medium=repository&utm_campaign=9781838641160), published by Packt.
+## Features
 
-**Automate your home or business with inexpensive Wi-Fi devices**
+- BLE Mesh wireless communication between three ESP32 nodes.
+- Ambient light monitoring using the TSL2561 light sensor.
+- Automatic light detection based on a predefined threshold.
+- Relay-based lamp switching.
+- Manual ON/OFF control through a web interface.
+- Wi-Fi connectivity through the Gateway node.
+- LED indicators during BLE Mesh provisioning.
+- Device provisioning and configuration using the nRF Mesh application.
+- Generic OnOff server and client model implementation.
 
-## What is this book about?
-Developing IoT Projects with ESP32 provides end-to-end coverage of secure data communication techniques from sensors to cloud platforms that will help you to develop production-grade IoT solutions by using the ESP32 SoC. You'll learn how to employ ESP32 in your IoT projects by interfacing with different sensors and actuators using different types of serial protocols.This book will show you how some projects require immediate output for end-users, and cover different display technologies as well as examples of driving different types of displays. The book features a dedicated chapter on cybersecurity packed with hands-on examples. 
+## Hardware Components
 
-This book covers the following exciting features: 
-* Explore advanced use cases like UART communication, sound and camera features, low-energy scenarios, and scheduling with an RTOS
-* Add different types of displays in your projects where immediate output to users is required
-* Connect to Wi-Fi and Bluetooth for local network communication
-* Connect cloud platforms through different IoT messaging protocols
-* Integrate ESP32 with third-party services such as voice assistants and IFTTT
+- ESP32 Development Boards (3 units)
+- TSL2561 Light Sensor
+- Relay Module
+- LEDs (3 units)
+- Breadboard and Jumper Wires
+- Lamp (optional for relay demonstration)
 
-If you feel this book is for you, get your [copy](https://www.amazon.com/dp/1838641165) today!
+## Device Nodes
 
-<a href="https://www.packtpub.com/?utm_source=github&utm_medium=banner&utm_campaign=GitHubBanner"><img src="https://raw.githubusercontent.com/PacktPublishing/GitHub/master/GitHub.png" alt="https://www.packtpub.com/" border="5" /></a>
+| Node | Function |
+|---|---|
+| Light Sensor | Measures ambient light and broadcasts light status through BLE Mesh. |
+| Switch | Receives BLE Mesh commands and controls the connected relay. |
+| Gateway | Connects to Wi-Fi and provides a web interface for manual switch control. |
 
-## Instructions and Navigations
-All of the code is organized into folders. For example, Chapter02.
+## Technologies Used
 
-The code will look like the following:
+- ESP32 and ESP-IDF
+- C Programming Language
+- Visual Studio Code and PlatformIO
+- Bluetooth Low Energy (BLE) Mesh
+- Wi-Fi
+- HTTP Web Server
+- Generic OnOff Model
+- nRF Mesh Mobile Application
+
+## System Communication
+
+```text
+       Light Sensor Node
+          (TSL2561)
+              |
+              | BLE Mesh
+              |
+              v
+         Switch Node
+           (Relay)
+              ^
+              |
+              | BLE Mesh
+              |
+         Gateway Node
+           (ESP32)
+              |
+              | Wi-Fi
+              |
+         Web Interface
 ```
-if (test expression)
-{
-  Statement upon condition is true
-}
+
+## BLE Mesh Configuration
+
+The system uses the following BLE Mesh models:
+
+| Model | Purpose |
+|---|---|
+| Configuration Server | Handles device provisioning and network configuration. |
+| Health Server | Provides device health reporting and LED attention indicators. |
+| Generic OnOff Server | Publishes device state changes and receives ON/OFF commands. |
+| Generic OnOff Client | Sends or receives state changes through the BLE Mesh network. |
+
+## Installation and Setup
+
+Clone the repository:
+
+```bash
+git clone YOUR_REPOSITORY_URL
+cd YOUR_PROJECT_FOLDER
 ```
 
-**Following is what you need for this book:**
-If you are an embedded software developer, an IoT software architect or developer, a technologist, or anyone who wants to learn how to use ESP32 and its applications, this book is for you. A basic understanding of embedded systems, programming, networking, and cloud computing concepts is necessary to get started with the book.
+Open the project in Visual Studio Code with PlatformIO and ESP-IDF installed.
 
-With the following software and hardware list you can run all code files present in the book (Chapter 1-12).
+Configure the development environment and Wi-Fi credentials for the Gateway node. Ensure that the required BLE Mesh configurations and dependencies are included.
 
-### Software and Hardware List
+Build and upload the firmware for each ESP32 node:
 
-| Chapter  | Software required                   | OS required                        |
-| -------- | ------------------------------------| -----------------------------------|
-| 1-12        | ESP32 and different additional hardware components | Windows, Mac OS X, and Linux (Any) |
-| 1-12        | ESP-IDF and several external libraries            | - |
+```bash
+pio run
+pio run -t upload
+```
 
-We also provide a PDF file that has color images of the screenshots/diagrams used in this book. [Click here to download it](http://www.packtpub.com/sites/default/files/downloads/9781838641160_ColorImages.pdf).
+Monitor the ESP32:
 
-## Code in Action
+```bash
+pio device monitor
+```
 
-Click on the following link to see the Code in Action:
+Install the **nRF Mesh** mobile application to provision and configure the three ESP32 nodes. Bind the appropriate application keys to the Generic OnOff models and configure the Light Sensor publication settings.
 
-[YouTube](https://www.youtube.com/playlist?list=PLeLcvrwLe187iw968S35Xf2P2NxsqEqBo)
+Connect the Gateway to the local Wi-Fi network and access its web interface using its assigned IP address.
 
-### Related products 
-* Practical Internet of Things Security - Second Edition [[Packt]](https://www.packtpub.com/product/practical-internet-of-things-security-second-edition/9781788625821?utm_source=github&utm_medium=repository&utm_campaign=9781788625821) [[Amazon]](https://www.amazon.com/dp/178862582X)
+## Testing
 
-* IoT and Edge Computing for Architects - Second Edition [[Packt]](https://www.packtpub.com/product/iot-and-edge-computing-for-architects-second-edition/9781839214806?utm_source=github&utm_medium=repository&utm_campaign=9781839214806) [[Amazon]](https://www.amazon.com/dp/1839214805)
+The system can be tested through the following scenarios:
 
-## Get to Know the Author
-**Vedat Ozan Oner** is an IoT product developer and software architect with a good blend of technical knowledge and experience. During his career, he participated in many IoT projects in different roles as a developer, architect, technical product manager, which let him see all aspects of developing successful IoT products in highly competitive markets. He specializes in wireless sensor networks and their applications, where he sees many technical challenges, thus, business opportunities. He has a bachelor’s degree from METU/Computer Engineering and holds several industry-recognized credentials like PMP, ITIL, and AWS Certified Developer as a lifelong learner and believer of continuous improvement.
-Alongside his professional life, he also enjoys IoT as a hobby and loves sharing his knowledge and experience with young people as a STEM ambassador in the UK. He has 2 daughters, one is 14 years old and leads the fun projects at home, the other one is 1 year old and is expected to join them in developing projects soon.
-Vedat started his limited company in 2018 in London to provide consultancy services to his clients as well as developing his own IoT products. He still lives there with his family.
+1. Send an ON command through the Gateway web interface and verify that the relay activates.
+2. Send an OFF command and verify that the relay deactivates.
+3. Reduce the ambient light level below the configured threshold and verify that the switch turns the lamp ON.
+4. Increase the ambient light level above the threshold and verify that the switch turns the lamp OFF.
 
-### Download a free PDF
+## Authors
 
- <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
-<p align="center"> <a href="https://packt.link/free-ebook/9781838641160">https://packt.link/free-ebook/9781838641160 </a> </p>
+**Kent Jesser Neri**
+
+**Alwyn Jade Reuyan**
+
+**JC Ree Redelosa**
+
+**Project:** Smart Home Automation System
+
+---
+
+*Academic Laboratory Project — IoT and Embedded Systems*
